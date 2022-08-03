@@ -1,0 +1,54 @@
+<listasProd th:fragment="listasUsu">
+
+	<div class="container">
+		<div class="row">
+		
+			 <div class="col-7">
+		        <h2>Usuarios</h2>
+		        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+		             th:text="${mensaje}"
+		             class="alert">
+		        </div>
+		        <a class="btn btn-success mb-2" th:href="@{/new}">Agregar</a>
+		        <div class="table-responsive">
+		            <table class="table table-bordered table-striped" id="rwd-table-id">
+				        <thead>
+				            <tr>
+				            	<th style="background-color:lavender;">ID</th >
+				                <th style="background-color:lavender;">Nombre</th >
+				                <th style="background-color:lavender;">Lat</th >	
+				          		<th style="background-color:lavender;">Long</th >		
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr th:each="us : ${listUser}">
+				            	<td th:text="${us.idUsu}">Product ID</td>
+				                <td th:text="${us.nombre}">Name</td>
+				                <td th:text="${us.idUbic.latitud}">Lat</td>
+				                 <td th:text="${us.idUbic.longitud}">Long</td>
+				                <td>
+				                	<a th:href="@{'/edit/' + ${us.idUsu}}" class="btn btn-warning">Editar</a>
+				                </td>
+				                <td>
+				                	<a th:href="@{'/delete/' + ${us.idUsu}}" class="btn btn-danger">Borrar</a>
+				                </td>
+				            </tr>
+				        </tbody >
+				           
+		            </table>
+		        </div>
+			 </div>    
+			 
+			 
+			 	<div class="col-5">
+					<h2>Localización</h2>
+					<div lang="en" th:replace="/layout/fragments/views/viewMapsLista :: mapsLista"> </div>
+				</div>
+	  </div>
+	  
+	</div>
+		    
+		    
+
+
+</listasProd>

@@ -1,0 +1,49 @@
+<editProd th:fragment="editCateg">
+	<div class="col-6">
+		<h2>Editar Categoria</h2>
+		<br />
+		<form action="#" th:action="@{/saveCateg}" th:object="${categ}" method="post" enctype="multipart/form-data">
+			<table class="table">
+			<tr>
+				<td>
+					<div class="form-group">
+		                <label for="categ">ID</label>
+		                <input autocomplete="off" autofocus th:field="*{idCateg}" id="idCateg" 
+		                		placeholder="Id" type="text" class="form-control" 
+		                		th:classappend="${#fields.hasErrors('idCateg')} ? 'is-invalid' : ''" disabled="disabled">
+		                <div class="invalid-feedback" th:errors="*{idCateg}"></div>
+		            </div>
+					<div class="form-group">
+		                <label for="product">Nombre de la categoria</label>
+		                <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"
+		                       placeholder="Escribe el nombre de la categoria" type="text"
+		                       class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+		                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+		            </div>
+					<div class="form-group">
+		                <label for="product">Descripcion</label>
+		                <input autocomplete="off" autofocus th:field="*{descripcion}" id="descripcion"
+		                       placeholder="Escribe la descripcion" type="text"
+		                       class="form-control" th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''">
+		                <div class="invalid-feedback" th:errors="*{descripcion}"></div>
+		            </div>
+		            <div class="form-group">
+   						<img th:if="${imgData2 == null}" th:src="@{'/images/productos.png'}" style="height: 50px;width: 50px;"/>
+						<img th:if="${imgData2 != null}" th:src="'data:image/jpeg;base64,' + ${imgData2}" style="height: 50px;width: 50px;"/>
+						
+						<input type="file" name="image" accept="image/png, image/jpeg" class="btn btn-warning"/>								
+
+		            </div>
+					
+				</td>
+			</tr>
+		
+
+			</table>
+	
+			<button type="submit" class="btn btn-success">Grabar</button> 
+			<a th:href="@{'/'}"class="btn btn-warning">Volver</a>					
+			
+		</form>
+	</div>
+</editProd>

@@ -1,0 +1,34 @@
+<div class="" th:fragment="pag">
+  <pagination id="idPag" class="pagination">
+    	<div th:if = "${totalPages > 1}">
+			   <div class = "pagination">
+			   
+			   <li class="page-item disabled" th:if="${currentPage == 1}">
+			      <a>Previous</a>
+			    </li>	    
+			    <li class="page-item" th:if="${currentPage > 1}">
+			      <a  th:href="@{'/page/' + ${currentPage - 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a>
+			    </li>
+
+                    <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
+                        <li class="page-item" th:classappend="${currentPage == i? 'active' : ''}">
+                            <a class="page-link" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}" th:text="${i}"></a>
+                        </li>
+                    </th:block>
+                    
+                       
+			    <li class="page-item" th:if="${currentPage < totalPages}">     
+			      <a th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+			    </li>
+			    <li class="page-item disabled" th:if="${currentPage == totalPages}">     
+			      <a>Next</a>
+			    </li>
+
+		</div>
+						  
+  </pagination>
+</div>
+
+
+
+

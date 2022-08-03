@@ -1,0 +1,48 @@
+<newProd th:fragment="newCateg">
+
+<div class="col-6">
+        <h2>Agregar categoria</h2>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        <form th:object="${categ}" th:action="@{/saveCateg}" method="post" enctype="multipart/form-data">
+ 	       	<div class="form-group">
+                <label for="product">Nombre de la categoria</label>
+                <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"
+                       placeholder="Escribe el nombre de la categoria" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+                
+               
+				
+				 <li th:each="err : ${#fields.errors('nombre')}" th:text="${err}" class="error" />
+				 
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripcion</label>
+                <input autocomplete="off" autofocus th:field="*{descripcion}" id="descripcion"
+                       placeholder="Escriba la descripcion" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{descripcion}"></div>
+            </div>
+           
+            
+             <div class="form-group">
+            	<td style="text-align: center;vertical-align: middle;">
+					
+						<img th:if="${imgData2 == null}" th:src="@{'/images/productos.png'}" style="height: 50px;width: 50px;"/>
+						<img th:if="${imgData2 != null}" th:src="'data:image/jpeg;base64,' + ${imgData2}" style="height: 50px;width: 50px;"/>
+						
+						<input type="file" name="image" accept="image/png, image/jpeg" class="btn btn-warning"/>				
+				</td >
+             </div>
+            
+      		<button type="submit" class="btn btn-success">Grabar</button>
+			<a th:href="@{'/'}" class="btn btn-warning">Volver</a> </td>
+						      
+        </form>
+	</div>
+
+
+</newProd>

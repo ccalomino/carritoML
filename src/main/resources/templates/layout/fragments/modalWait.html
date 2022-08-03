@@ -1,0 +1,79 @@
+<modalWait th:fragment="modalWait">
+	
+<!--<meta name="_csrf" content="${_csrf.token}"/>-->
+<!--<meta name="_csrf_header" content="${_csrf.headerName}"/>-->
+	
+	  <script>
+
+			$(function () {
+			    var token = $("meta[name='_csrf']").attr("content");
+			    var header = $("meta[name='_csrf_header']").attr("content");
+			    $(document).ajaxSend(function (e, xhr, options) {
+			        xhr.setRequestHeader(header, token);
+			    });
+			});
+	  
+	  		function showPleaseWaitAJAX(id)
+	  		{
+			
+				showPleaseWait();
+				var search = {}
+				var obj1 = {message: 'Hello!'}
+		
+				$.ajax({
+			        type: 'POST',
+			        contentType: "application/json",
+			        url: '/downloadFactura/'+id,
+			        //data: JSON.stringify(search),
+			        data:JSON.parse(JSON.stringify(obj1)),
+			        dataType: 'json',
+			        cache: false,
+			        timeout: 6000000,
+			        success: function (data) {	
+						alert('success');	
+			            hidePleaseWait();
+			        },
+			        error: function (jqXHR, text, err) {
+      						alert(jqXHR + " - " + text + " - " + err.toString());
+       						hidePleaseWait();
+  					}
+		    	});
+		
+		}
+	  
+	  
+	  
+	  
+	  
+	  
+	  		function showPleaseWait()
+			{
+			    $('.modal').modal('show');
+			}
+			
+			function hidePleaseWait()
+			{
+			    $('.modal').modal('hide');
+			}
+			
+			$('#myModal').on('shown.bs.modal', function (event) {
+				alert("xxxxxxxx");
+    			if (closeEditModal) {
+        			$('#myModal').modal('hide');
+        			closeModal = false;
+    			}
+			});
+
+
+	  </script>
+  
+	<div id="myModal" class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+	    <div class="modal-dialog modal-sm">
+	        <div class="modal-content" style="width: 200px;">
+	            <span class="fa fa-spinner fa-spin fa-5x fa-fw" style="width: 200px;"></span>
+	            <p class="please-wait-message">Please wait ..... </p>
+	        </div>
+	    </div>
+	</div>
+	
+</modalWait>

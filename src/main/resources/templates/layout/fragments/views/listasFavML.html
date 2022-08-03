@@ -1,0 +1,93 @@
+<listasFavML th:fragment="listFav">
+
+<div class="">
+       
+  <form th:object="${favorito}" th:action="@{/saveFavorito}" method="post">
+        	
+        	<table class="table">
+        		<tr>
+        		
+				  <td style="width:20%">
+				   			<h2>Usuarios</h2>
+							<div class="table-responsive">
+					            <table class="">
+							        <thead>
+							            <tr>						     
+							                <th style="background-color:lavender;width:15px">Nombre</th>
+							                 <th style="background-color:lavender;width:150px"></th> 
+							            </tr>
+							        </thead>
+							        <tbody>
+							            <tr th:each="us : ${listUsuML}">
+							                <td th:text="${us.nombre}">Name</td>
+							                <td>
+							                	<a th:href="@{'/seleccionarUsuML/' + ${us.idUsuML}}" class="btn btn-warning">Seleccionar</a>
+							                	<img th:if="${favorito.usuML != null && favorito.usuML.idUsuML == us.idUsuML}" th:src="@{'/images/cliente.png'}" style="height: 10px;width: 10px;"/>
+							                </td>							            
+							            </tr>
+							        </tbody>
+							           
+					            </table>
+					        </div>						 
+				  </td >
+				  
+				  
+				  
+				  
+				  
+				  <td style="width:30%">
+				  			 <h2>Productos</h2>
+							<div class="table">
+					            <table class="">
+							        <thead>
+							            <tr>
+							                <th style="background-color:lavender;width:100px">Nombre</th >
+
+							            </tr>
+							        </thead>
+							        <tbody>
+
+
+							        	<div th:if="${#lists.isEmpty(listProdMLDto)}">
+							        		<tr th:each="p : ${listProdML}">
+								                <td th:text="${p.nombre}">Name</td>
+								                <td></td>
+								                <td><a th:href="@{'/agregarFavorito/' + ${p.idProdML}}" class="btn btn-warning">Fav</a></td>
+								            </tr>
+							        	</div>
+							        								        
+							        	<div th:if="${not #lists.isEmpty(listProdMLDto)}">
+								            <tr th:each="dto : ${listProdMLDto}">							            	
+								                <td th:text="${dto.nombre}"></td>
+								                <td><img th:if="${dto.id_usuml != 0}" th:src="@{'/images/star.png'}" style="height: 10px;width: 10px;"/></td>
+								                <td><a th:href="@{'/agregarFavorito/' + ${dto.id_prodml}}" class="btn btn-warning">Fav</a></td>							              
+								            </tr>
+							        	</div>							        	
+							        	
+
+							        	
+
+							            
+							        </tbody>
+							        
+				
+							           
+					            </table>
+					        </div>
+				  </td>
+				  
+				  
+	
+	
+	 			
+				  
+	     		</tr>
+	     		
+ 	 	</table>   
+      		
+  	</form>				      
+
+	</div>
+
+
+</listasFavML>

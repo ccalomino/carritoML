@@ -1,0 +1,110 @@
+package com.example.carritoWeb.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.example.carritoWeb.model.Categoria;
+import com.example.carritoWeb.model.Producto;
+import com.example.carritoWeb.repo.ICategoriaRepo;
+
+import groovy.ui.Console;
+
+
+@Controller
+public class CategoriaWebController {
+
+
+@Autowired
+private ICategoriaRepo repoCa;
+
+
+// --------------------------------------------------------------------------------------------
+// -------------------------------CATEGORIAS------------------------------
+// --------------------------------------------------------------------------------------------
+
+	@RequestMapping("/listarCategorias")
+	public String listarCategorias(Model model) 
+	{
+		List<Categoria> list = repoCa.findAll();
+		model.addAttribute("listCategoria", list);
+		model.addAttribute("content", "listasCateg"); 
+		return "index";
+	}
+	
+	@RequestMapping("/newCateg")
+	public String showNewCategPage(Model model, HttpServletRequest request) {
+		request.getSession().setAttribute("idCategSession", -1);
+		Categoria c = new Categoria();
+		model.addAttribute("categ", c);	
+		model.addAttribute("content", "newCateg"); 
+		return "index";
+	}
+	
+	@RequestMapping("/addCateg/{id}")
+	public String addCateg(@PathVariable(name = "id") int id) {
+		Categoria c = repoCa.findByidCateg(id);
+		repoCa.save(c);
+		return "redirect:/";		
+	}	
+	
+	
+	@RequestMapping(value = "/saveCateg", method = RequestMethod.POST)
+	public String saveCateg(@ModelAttribute("categ") Categoria categ, HttpServletRequest request, @RequestParam("image") MultipartFile multipartFile, BindingResult result) throws IOException 
+	{
+		int cs = (int) request.getSession().getAttribute("idCategSession");
+		
+		if (cs!=-1)
+			categ.setIdCateg(cs);
+		
+		 if (result.hasErrors()) {			
+		        return "xxxx";
+		    }
+		 
+		 if (multipartFile.getSize() == 0)
+			 categ.setImg(null);
+		 else
+			 categ.setImg(multipartFile.getBytes());
+		 
+		repoCa.save(categ);	
+		return "redirect:/listarCategorias";
+	}
+	
+	
+	@RequestMapping("/deleteCateg/{id}")
+	public String deleteCateg(@PathVariable(name = "id") int id) {
+		Categoria c = repoCa.findByidCateg(id);
+		repoCa.delete(c);
+		return "redirect:/listarCategorias";		
+	}	
+
+	@RequestMapping("/editCateg/{id}")
+	public ModelAndView showEditCategPage(@PathVariable(name = "id") int id, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("index");
+		Categoria c = repoCa.findByidCateg(id);
+		mav.addObject("categ", c);
+		
+		if (c.getImg()!=null)
+			mav.addObject("imgData2",c.getImgData());
+		else
+			mav.addObject("imgData2",null);
+		
+		mav.addObject("content","editCateg");
+		request.getSession().setAttribute("idCategSession", c.getIdCateg());
+		return mav;
+	}
+
+}

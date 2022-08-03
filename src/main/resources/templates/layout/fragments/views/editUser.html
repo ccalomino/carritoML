@@ -1,0 +1,66 @@
+<editUser th:fragment="editUser">
+	
+	
+	
+	
+	<div class="container">
+		<div class="row">
+		  <div class="col-6">
+			<h2>Editar Usuario</h2>
+			<br />
+			<form action="#" th:action="@{/save}" th:object="${user}" method="post">				
+				<div class="form-group">
+					<label for="product">ID</label>
+		                <input autocomplete="off" autofocus th:field="*{idUsu}" id="idUsu" 
+		                		placeholder="Id" type="text" class="form-control" 
+		                		th:classappend="${#fields.hasErrors('idUsu')} ? 'is-invalid' : ''" disabled="disabled">
+		            <div class="invalid-feedback" th:errors="*{idUsu}"></div>	 
+	            </div>
+				<div class="form-group">
+	                <label for="user">Nombre del usuario</label>
+	                <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"
+	                       placeholder="Escribe el nombre del producto" type="text"
+	                       class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+	                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+	            </div>
+	            <div class="form-group">
+	                <label for="user">Clave</label>
+	                <input autocomplete="off" autofocus th:field="*{clave}" id="clave"
+	                       placeholder="Escribe el password" type="text"
+	                       class="form-control" th:classappend="${#fields.hasErrors('clave')} ? 'is-invalid' : ''">
+	                <div class="invalid-feedback" th:errors="*{clave}"></div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="user">Latitud</label>
+	                <input autocomplete="off" autofocus th:field="*{idUbic.latitud}" name="*{idUbic.latitud}" id="latitud"
+	                       placeholder="Click en mapa" type="text"
+	                       class="form-control">
+
+	            </div>
+	            
+	             <div class="form-group">
+	                <label for="user">Longitud</label>
+	                <input autocomplete="off" autofocus th:field="*{idUbic.longitud}" name="*{idUbic.longitud}" id="longitud"
+	                       placeholder="Click en mapa" type="text"
+	                       class="form-control">
+	             
+	            </div>
+	            	
+	            <button type="submit" class="btn btn-success">Grabar</button> 
+				<a th:href="@{'/'}" class="btn btn-warning">Volver</a> 
+			
+			</form>
+		</div>
+
+	    <div class="col-6">
+			<h2>Localización</h2>
+			<div lang="en" th:replace="/layout/fragments/views/viewMaps :: maps"> </div>
+		</div>
+		
+	  </div>
+	  
+	</div>
+
+	
+</editUser>

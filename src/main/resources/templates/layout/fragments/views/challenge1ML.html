@@ -1,0 +1,100 @@
+<challenge1ML th:fragment="challenge1ML">
+
+<div class="col-7">
+        
+        
+        
+       <form th:action="@{/ejecutarNivel1}" method="post">
+       
+       		<h2>Nivel 1</h2>
+        	<h>Maximizar compra ingresando el monto y obteniendo la lista maximizada -> </h><br>
+
+            <div class="form-group">
+                <label for="nombre">Monto</label>
+                <input type="text" id="monto" th:name="monto" placeholder="Monto"></input>
+            </div>
+	   		<button type="submit" class="btn btn-success">Aceptar</button>						      
+        </form>
+        
+</div>
+       
+	<div class="container">
+		<div class="row">
+			 <div class="col-7">
+		        <h2>Productos ML</h2>
+		        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+		             th:text="${mensaje}"
+		             class="alert">
+		        </div>
+		        
+		        <div class="table-responsive">
+		            <table class="table table-bordered table-striped" id="rwd-table-id">
+				        <thead>
+				            <tr>
+				            	<th style="background-color:lavender;">ID</th >
+				                <th style="background-color:lavender;">Nombre</th >	
+				                <th style="background-color:lavender;">Precio</th >	
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr th:each="p : ${listProdML}">
+				            	<td th:text="${p.idProdML}">Product ID</td>
+				                <td th:text="${p.nombre}">Nombre</td>
+				                <td th:text="${p.precio}">Precio</td>
+
+				            </tr>
+				        </tbody >
+				           
+		            </table>
+		        </div>
+			 </div>    
+			 
+			 
+			<div class="col-7">
+		        <h2>Resultado</h2>
+		        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+		             th:text="${mensaje}"
+		             class="alert">
+		        </div>
+		        
+		        <div class="table-responsive">
+		            <table class="table table-bordered table-striped" id="rwd-table-id">
+				        <thead>
+				            <tr>
+				            	<th style="background-color:lavender;">ID</th >
+				                <th style="background-color:lavender;">Nombre</th >	
+				                <th style="background-color:lavender;">Precio</th >	
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr th:each="p : ${listProdMLResult}">
+				            	<td th:text="${p.idProdML}">Product ID</td>
+				                <td th:text="${p.nombre}">Nombre</td>
+				                <td th:text="${p.precio}">Precio</td>
+				            </tr>
+							<tr>
+				            	<th style="background-color:lavender;"></th >
+				                <th style="background-color:lavender;">Total</th >	
+				                <td th:text="${maximaSuma}" style="background-color:lavender;"></td>
+				            </tr>				            
+				           
+    
+				        </tbody >
+	 
+		            </table>
+		        </div>
+			 </div>    
+
+			 
+	  </div>
+	  
+	  
+	  
+
+	  
+	</div>
+		    
+		    
+
+
+</challenge1ML>

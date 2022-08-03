@@ -1,0 +1,85 @@
+<listasCarr th:fragment="listasCarr">
+	 <div class="col-8">
+        <h2>Carritos</h2>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        <a class="btn btn-success mb-2" th:href="@{/newCarr}">Crear Carrito</a>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+		        <thead>
+		            <tr>
+		            	<th style="background-color:lavender;">ID Carrito</th >
+		                <th style="background-color:lavender;">Usuario</th >
+		                <th style="background-color:lavender;">Producto</th >
+		                <th style="background-color:lavender;">Precio</th >
+		                <th style="background-color:lavender;">Cant</th >
+		                <th style="background-color:lavender;">Total</th >
+		                <th style="background-color:lavender;">Factura</th >          
+		            </tr>
+		        </thead>
+		        <tbody>
+		        	<div th:with="count=${counter.get()}">
+		        			
+		        		
+			            	<tr th:each="c : ${lista}">
+			            	
+			            		<div th:if="${c.rows == 1}">
+					            		<td th:text="${c.id_carrito}" th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">Product ID</td>
+					               		<td th:text="${c.cliente}" th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">Name</td>
+					               		<td th:text="${c.producto}">Producto</td>
+			                			<td th:text="${c.precio}">Precio</td>
+			                			<td th:text="${c.cantidad}">Cant</td>
+			                			<td th:text="${c.total}" th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">Total</td>
+			                			<td th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">
+					   						<button type="button" th:onclick="|window.location.href='/downloadFactura/'+${c.id_carrito}|" class="btn"><img th:src="@{/images/factura.png}" style="height: 20px;width: 30px" /></button> 
+<!--					   						<button type="button" class="btn"><img th:src="@{/images/factura.png}" style="height: 20px;width: 30px" th:onclick="|showPleaseWaitAJAX('${c.id_carrito}')|"/></button> -->
+					  					</td >
+			            		</div>
+			            		
+			            		<div th:unless="${c.rows == 1}">
+			            			<div th:if="${counter.get() == 0}">
+					            		<td th:text="${c.id_carrito}" th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">Product ID</td>
+					               		<td th:text="${c.cliente}" th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">Name</td>
+					               		<td th:text="${c.producto}">Producto</td>
+			                			<td th:text="${c.precio}">Precio</td>
+			                			<td th:text="${c.cantidad}">Cant</td> 
+			                			<td th:text="${c.total}" th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">Total</td>
+			                			<td th:rowspan="${c.rows}" style="text-align: center;vertical-align: middle;">
+					   						<button type="submit" th:onclick="|window.location.href='/downloadFactura/'+${c.id_carrito}|" class="btn"><img th:src="@{/images/factura.png}" style="height: 20px;width: 30px"/></button> 
+<!--					   						<button type="submit" class="btn"><img th:src="@{/images/factura.png}" style="height: 20px;width: 30px" th:onclick="|showPleaseWaitAJAX('${c.id_carrito}')|"/></button> -->
+					  					</td >
+			            			</div>
+			            			<div th:unless="${counter.get() == 0}">
+			            				<td th:text="${c.producto}">Producto</td>
+			                			<td th:text="${c.precio}">Precio</td>
+			                			<td th:text="${c.cantidad}">Cant</td> 
+			                				                			
+			            			</div>			            			
+			            		</div>
+	
+			            		<div th:with="count=${counter.incrementAndGet()}"></div>
+			            		
+			            		<div th:if="${counter.get() == c.rows}">
+			            			<div th:with="count=${counter.clear()}">
+			            			</div>
+			            		</div>
+
+			            		
+			            	</tr>
+		        	
+		        	</div>
+		        </tbody>
+		           
+            </table>
+            
+            
+
+
+
+ 
+            
+        </div>
+	 </div>            
+</listasCarr>

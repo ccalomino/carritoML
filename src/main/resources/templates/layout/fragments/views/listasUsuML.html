@@ -1,0 +1,68 @@
+<listasUsuML th:fragment="listasUsuML">
+
+<div class="col-6">
+        <h2>Agregar usuario</h2>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        
+       <form th:object="${userML}" th:action="@{/saveUsuML}" method="post">
+ 	       	<div class="form-group">
+                <label for="nombre">Nombre del usuario</label>
+                <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"
+                       placeholder="Escribe el nombre del usuario" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+            </div>
+	   		<button type="submit" class="btn btn-success">Agregar</button>						      
+        </form>
+        
+</div>
+       
+	<div class="container">
+		<div class="row">
+		
+		
+
+        
+        
+			 <div class="col-7">
+		        <h2>Usuarios ML</h2>
+		        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+		             th:text="${mensaje}"
+		             class="alert">
+		        </div>
+		        
+		        <div class="table-responsive">
+		            <table class="table table-bordered table-striped" id="rwd-table-id">
+				        <thead>
+				            <tr>
+				            	<th style="background-color:lavender;">ID</th >
+				                <th style="background-color:lavender;">Nombre</th >	
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr th:each="us : ${listUsuML}">
+				            	<td th:text="${us.idUsuML}">Product ID</td>
+				                <td th:text="${us.nombre}">Name</td>
+			                	<td>
+			                		<a th:href="@{'/deleteUsuML/' + ${us.idUsuML}}" class="btn btn-danger">Borrar</a>
+			                	</td>
+				            </tr>
+				        </tbody >
+				           
+		            </table>
+		        </div>
+			 </div>    
+			 
+			 
+
+	  </div>
+	  
+	</div>
+		    
+		    
+
+
+</listasUsuML>

@@ -1,0 +1,61 @@
+<newProd th:fragment="newProd">
+
+<div class="col-6">
+        <h2>Agregar producto</h2>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        <form th:object="${product}" th:action="@{/saveProd}" method="post" enctype="multipart/form-data">
+ 	       	<div class="form-group">
+                <label for="product">Nombre del producto</label>
+                <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"
+                       placeholder="Escribe el nombre del producto" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{nombre}"></div>
+                
+               
+				
+				 <li th:each="err : ${#fields.errors('nombre')}" th:text="${err}" class="error" />
+				 
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripcion</label>
+                <input autocomplete="off" autofocus th:field="*{descripcion}" id="descripcion"
+                       placeholder="Escriba la descripcion" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{descripcion}"></div>
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock</label>
+                <input autocomplete="off" autofocus th:field="*{stock}" id="stock"
+                       placeholder="Escriba el stock" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('stock')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{stock}"></div>
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio</label>
+                <input autocomplete="off" autofocus th:field="*{precio}" id="precio"
+                       placeholder="Escriba el precio" type="text"
+                       class="form-control" th:classappend="${#fields.hasErrors('precio')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:errors="*{precio}"></div>
+            </div>
+            
+             <div class="form-group">
+            	<td style="text-align: center;vertical-align: middle;">
+					
+						<img th:if="${imgData2 == null}" th:src="@{'/images/productos.png'}" style="height: 50px;width: 50px;"/>
+						<img th:if="${imgData2 != null}" th:src="'data:image/jpeg;base64,' + ${imgData2}" style="height: 50px;width: 50px;"/>
+						
+						<input type="file" name="image" accept="image/png, image/jpeg" class="btn btn-warning"/>				
+				</td >
+             </div>
+            
+      		<button type="submit" class="btn btn-success">Grabar</button>
+			<a th:href="@{'/'}" class="btn btn-warning">Volver</a> </td>
+						      
+        </form>
+	</div>
+
+
+</newProd>

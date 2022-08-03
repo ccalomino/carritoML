@@ -1,0 +1,90 @@
+<listas th:fragment="listas">
+
+		<div align="center">
+		    <h1>Lista de Usuarios</h1>
+		    <a href="new">Crear</a>
+		    <br/><br/>
+		    <table border="1" cellpadding="10">
+		        <thead>
+		            <tr>
+		            	<th>ID</th>
+		                <th>Nombre</th>
+		                <th>Clave</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr th:each="us : ${listUser}">
+		            	<td th:text="${us.idUsu}">Product ID</td>
+		                <td th:text="${us.nombre}">Name</td>
+		                <td th:text="${us.clave}">Brand</td>
+		                <td>
+		                	<a th:href="@{'/edit/' + ${us.idUsu}}">Edit</a>
+		                	&nbsp;&nbsp;&nbsp;
+		                	<a th:href="@{'/delete/' + ${us.idUsu}}">Delete</a>
+		                </td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div> 
+
+
+		<div align="center">
+		    <h1>Lista de Productos</h1>
+		    <a href="newProd">Crear</a>
+		    <br/><br/>
+		    <table border="1" cellpadding="10">
+		        <thead>
+		            <tr>
+		            	<th>ID</th>
+		                <th>Nombre</th>
+		                <th>Descripcion</th>
+		                <th>Stock</th>
+		                <th>Precio</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr th:each="p : ${listProd}">
+		            	<td th:text="${p.idProd}">Product ID</td>
+		                <td th:text="${p.nombre}">Name</td>
+		                <td th:text="${p.descripcion}">Brand</td>
+		                <td th:text="${p.stock}">Brand</td>
+		                <td th:text="${p.precio}">Brand</td>
+		                <td>
+		                	<a th:href="@{'/editProd/' + ${p.idProd}}">Edit</a>
+		                	&nbsp;&nbsp;&nbsp;
+		                	<a th:href="@{'/deleteProd/' + ${p.idProd}}">Delete</a>
+		                </td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div> 
+		
+		
+		
+		<div align="center">
+		    <h1>Carritos</h1>
+		    <a href="newCarr">Crear</a>
+		    <br/><br/>
+		    <table border="1" cellpadding="10">
+		        <thead>
+		            <tr>
+		            	<th>ID</th>
+		                <th>Cliente</th>
+		                <th>Producto</th>
+		                <th>Precio</th>
+		                <th>Cantidad</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr th:each="ca : ${listCarrito}">
+		            	<td th:text="${ca.id_carrito}">ID</td>
+		                <td th:text="${ca.cliente}">Cliente</td>
+		                <td th:text="${ca.producto}">Producto</td>
+		                <td th:text="${ca.precio}">Precio</td>
+		                <td th:text="${ca.cantidad}">Cant</td>
+		               
+		            </tr>
+		        </tbody>
+		    </table>
+		</div> 
+</listas>	

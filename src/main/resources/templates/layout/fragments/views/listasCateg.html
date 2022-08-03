@@ -1,0 +1,46 @@
+<listasProd th:fragment="listasCateg">
+	 <div class="col-10">
+        <h2>Categorias</h2>
+        <div th:classappend="'alert-' + (${clase != null} ? ${clase} : info)" th:if="${mensaje != null}"
+             th:text="${mensaje}"
+             class="alert">
+        </div>
+        <a class="btn btn-success mb-2" th:href="@{/newCateg}">Agregar</a>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+		        <thead>
+		            <tr>
+		            	<th style="background-color:lavender;">ID</th >
+		                <th style="background-color:lavender;">Categoria</th >
+		                <th style="background-color:lavender;">Descripcion</th >
+		                <th style="background-color:lavender;"></th >
+		             	<th style="background-color:lavender;"></th >
+		             	<th style="background-color:lavender;"></th >
+
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr th:each="ca : ${listCategoria}">
+		            	<td th:text="${ca.idCateg}">ID</td>
+		                <td th:text="${ca.nombre}">Categ</td>
+		                <td th:text="${ca.descripcion}">Descr</td>
+		                
+		                <td>					                	
+						 <img th:if="${ca.img == null}" th:src="@{'/images/productos.png'}" style="height: 20px;width: 20px;"/>
+						 <img th:if="${ca.img != null}" th:src="'data:image/jpeg;base64,' + ${ca.imgData}" style="height: 30px;width: 30px;"/>
+						</td>
+		               
+                       
+		                <td>
+		                	<a th:href="@{'/editCateg/' + ${ca.idCateg}}" class="btn btn-warning">Editar</a>
+		                </td>
+		                <td>
+		                	<a th:href="@{'/deleteCateg/' + ${ca.idCateg}}" class="btn btn-danger">Borrar</a>
+		                </td>
+		            </tr>
+		        </tbody>
+		           
+            </table>
+        </div>
+	 </div>            
+</listasProd>
