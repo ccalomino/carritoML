@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import com.bea.xml.stream.samples.Parse;
 import com.example.carritoWeb.dto.ProductoMLDto;
 import com.example.carritoWeb.model.ProductoML;
-import com.example.carritoWeb.model.UsuarioML;
 import com.example.carritoWeb.repo.IProductoMLRepo;
 
 @Controller
@@ -37,13 +36,15 @@ public class ProductoMLWebController {
 		return "Hellooooo";
 	}
 	
-	@GetMapping(value="clientHello")
-	public String getHelloClient() {
+	@RequestMapping(value="/clientHello", method=RequestMethod.GET)
+	public @ResponseBody String getHelloClient() {
 		String uri = "http://localhost:8098/hello";
 		RestTemplate rest = new RestTemplate();
 		String result = rest.getForObject(uri, String.class);
 		return result;
 	}
+	
+
 	// -------------------------------------------------------------------------------------------------
 	// -------------------------------------------------------------------------------------------------
 	
@@ -230,6 +231,13 @@ public class ProductoMLWebController {
 	// -----------------------------------------------------------------
 	// -----------------------------------------------------------------
 	
+	
+		@RequestMapping(value="/topFive", method=RequestMethod.GET)
+		public @ResponseBody List<ProductoMLDto> topFive(){
+			return repoPML.findTopFive();
+		}
+	
+	
 		@GetMapping("/pruebasML2")
 		public String pruebasML2(Model model, HttpSession session) {		
 			List<ProductoML> listp = repoPML.findAll();	
@@ -245,7 +253,7 @@ public class ProductoMLWebController {
 		@RequestMapping(value = "/ejecutarNivel2", method = RequestMethod.POST)
 		public String ejecutarNivel2(Model model, HttpSession session) throws IOException 
 		{		
-			List<ProductoMLDto> listProdMLResult = repoPML.findTopFive();
+			List<ProductoMLDto> listProdMLResult = this.topFive();
 			model.addAttribute("listProdMLResult", listProdMLResult);			
 			model.addAttribute("content", "challenge2ML"); 
 			return "index";	
