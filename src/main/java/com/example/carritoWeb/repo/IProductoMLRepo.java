@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.carritoWeb.dto.ProductoMLDto;
+import com.example.carritoWeb.dto.ProductoMLDto2;
 import com.example.carritoWeb.model.ProductoML;
 
 public interface IProductoMLRepo extends JpaRepository<ProductoML, Integer>{
@@ -32,7 +33,7 @@ public interface IProductoMLRepo extends JpaRepository<ProductoML, Integer>{
 
 	@Query(nativeQuery = true,
             value = "SELECT f.id_prodml, (select p.nombre from productoml p where p.id_prodml = f.id_prodml), COUNT(*) as cant FROM favoritoml f GROUP BY f.id_prodml ORDER BY 3 desc FETCH FIRST 5 ROWS ONLY")	
-    List<ProductoMLDto> findTopFive();
+    List<ProductoMLDto2> findTopFive();
 
 //	@Modifying
 //	@Query("DELETE FROM favoritoml WHERE id_prodml=:idProd AND d_usuml=:idUsu")

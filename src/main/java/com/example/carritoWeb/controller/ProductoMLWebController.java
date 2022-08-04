@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.carritoWeb.dto.ProductoMLDto;
+import com.example.carritoWeb.dto.ProductoMLDto2;
 import com.example.carritoWeb.model.ProductoML;
 import com.example.carritoWeb.repo.IProductoMLRepo;
 
@@ -131,11 +132,7 @@ public class ProductoMLWebController {
 		return "redirect:/listarProductosML";		
 	}
 	
-	
-	
 
-	
-	
 	
 	
 	// -----------------------------------------------------------------
@@ -143,6 +140,7 @@ public class ProductoMLWebController {
 	// Nivel 1
 	// -----------------------------------------------------------------
 	// -----------------------------------------------------------------
+	
 	@GetMapping("/pruebasML1")
 	public String pruebasML1(Model model, HttpSession session) {		
 		List<ProductoML> listp = repoPML.findAll();	
@@ -180,39 +178,56 @@ public class ProductoMLWebController {
 	}
 	
 
+	@RequestMapping(value="/coupon", method=RequestMethod.GET)
+	public @ResponseBody List<ProductoML> coupon(@RequestParam(value = "listp",required = false) List<ProductoML> listp, @RequestParam(value = "monto", defaultValue = "0") float monto) {
+		
+		List<ProductoML> listProdMLResultMax = new ArrayList<ProductoML>();
+		if (listp!=null)
+		{
+			
+			//maximizar
+			
+			//int index = 0;
+			float maximo = 0;
+			float maximaSuma = 0;
+			
+			for (int index = 0; index < listp.size(); index++) {
+				float suma = 0;
+				List<ProductoML> listProdMLResult = new ArrayList<ProductoML>();
+				this.maximizarList(listProdMLResult, listp, index, suma, monto);
+				float sumaParcial = this.sumar(listProdMLResult);
+				if (sumaParcial > maximaSuma)
+				{
+					listProdMLResultMax = listProdMLResult;
+					maximaSuma = sumaParcial;
+					// Corto la busqueda si llego al monto
+					if (maximaSuma == monto) {
+						index = listp.size();
+					}
+				}
+			}
+			
+		}
+
+		
+		return listProdMLResultMax;
+		
+//		String uri = "http://localhost:8098/hello";
+//		RestTemplate rest = new RestTemplate();
+//		String result = rest.getForObject(uri, String.class);
+//		return result;
+	}
+	
+	
 	
 	@RequestMapping(value = "/ejecutarNivel1", method = RequestMethod.POST)
 	public String ejecutarNivel1(Model model, HttpSession session, @RequestParam(value = "monto", defaultValue = "0") float monto) throws IOException 
-	{
-	
+	{	
 		List<ProductoML> listp = repoPML.findAll();
-
-		
-		List<ProductoML> listProdMLResultMax = new ArrayList<ProductoML>();
-		//maximizar
-		
-		//int index = 0;
-		float maximo = 0;
-		float maximaSuma = 0;
-		
-		for (int index = 0; index < listp.size(); index++) {
-			float suma = 0;
-			List<ProductoML> listProdMLResult = new ArrayList<ProductoML>();
-			this.maximizarList(listProdMLResult, listp, index, suma, monto);
-			float sumaParcial = this.sumar(listProdMLResult);
-			if (sumaParcial > maximaSuma)
-			{
-				listProdMLResultMax = listProdMLResult;
-				maximaSuma = sumaParcial;
-				// Corto la busqueda si llego al monto
-				if (maximaSuma == monto) {
-					index = listp.size();
-				}
-			}
-		}
-		
+		List<ProductoML> listProdMLResultMaxT = this.coupon(listp,monto);
+		float maximaSuma = this.sumar(listProdMLResultMaxT);
 		model.addAttribute("maximaSuma",maximaSuma);
-		model.addAttribute("listProdMLResult", listProdMLResultMax);		
+		model.addAttribute("listProdMLResult", listProdMLResultMaxT);		
 		model.addAttribute("listProdML", listp);	
 		model.addAttribute("content", "challenge1ML"); 
 		return "index";	
@@ -232,9 +247,16 @@ public class ProductoMLWebController {
 	// -----------------------------------------------------------------
 	
 	
-		@RequestMapping(value="/topFive", method=RequestMethod.GET)
-		public @ResponseBody List<ProductoMLDto> topFive(){
-			return repoPML.findTopFive();
+		@RequestMapping(value="/coupon/stats", method=RequestMethod.GET)
+		public @ResponseBody List<ProductoMLDto2> topFive(){
+			
+			try {
+				return repoPML.findTopFive();
+			}catch(Exception e) {
+				return new ArrayList<ProductoMLDto2>();
+			}
+			
+			
 		}
 	
 	
@@ -244,16 +266,14 @@ public class ProductoMLWebController {
 			model.addAttribute("listProdML", listp);	
 			session.setAttribute("listProdML", listp);
 			model.addAttribute("content", "challenge2ML"); 
-			return "index";
-			
-		
+			return "index";	
 		}
 
 		
 		@RequestMapping(value = "/ejecutarNivel2", method = RequestMethod.POST)
 		public String ejecutarNivel2(Model model, HttpSession session) throws IOException 
 		{		
-			List<ProductoMLDto> listProdMLResult = this.topFive();
+			List<ProductoMLDto2> listProdMLResult = this.topFive();
 			model.addAttribute("listProdMLResult", listProdMLResult);			
 			model.addAttribute("content", "challenge2ML"); 
 			return "index";	
