@@ -1,27 +1,15 @@
 package com.example.carritoWeb;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.example.carritoWeb.model.Carrito;
-import com.example.carritoWeb.model.Producto;
-import com.example.carritoWeb.model.ProductosEnCarrito;
-import com.example.carritoWeb.model.Usuario;
-import com.example.carritoWeb.model.Venta;
 import com.example.carritoWeb.repo.ICarritoRepo;
 import com.example.carritoWeb.repo.IProductoRepo;
 import com.example.carritoWeb.repo.IProductosEnCarritoRepo;
 import com.example.carritoWeb.repo.IUsuarioRepo;
-import com.example.carritoWeb.repo.IVentaRepo;
 
 @SpringBootTest
 class CarritoWebApplicationTests {
@@ -35,8 +23,7 @@ class CarritoWebApplicationTests {
 	private ICarritoRepo repCarr;
 	@Autowired
 	private IProductosEnCarritoRepo repPC;
-	@Autowired
-	private IVentaRepo repVenta;
+
 //	@Autowired
 //	private BCryptPasswordEncoder enc;
 	

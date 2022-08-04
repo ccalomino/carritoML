@@ -35,14 +35,12 @@ import com.example.carritoWeb.model.Producto;
 import com.example.carritoWeb.model.ProductosEnCarrito;
 import com.example.carritoWeb.model.Ubicacion;
 import com.example.carritoWeb.model.Usuario;
-import com.example.carritoWeb.model.Venta;
 import com.example.carritoWeb.repo.ICarritoRepo;
 import com.example.carritoWeb.repo.ICategoriaRepo;
 import com.example.carritoWeb.repo.IProductoRepo;
 import com.example.carritoWeb.repo.IProductosEnCarritoRepo;
 import com.example.carritoWeb.repo.IUbicacionRepo;
 import com.example.carritoWeb.repo.IUsuarioRepo;
-import com.example.carritoWeb.repo.IVentaRepo;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -58,8 +56,7 @@ public class CarritoWebController {
 	private IProductoRepo repoP;
 	@Autowired
 	private ICarritoRepo repoC;
-	@Autowired
-	private IVentaRepo repoV;
+
 	@Autowired
 	private IProductosEnCarritoRepo repoPC;
 	@Autowired
@@ -82,8 +79,8 @@ public class CarritoWebController {
 		List<Producto> listp = repoP.findAll();
 		model.addAttribute("listProd", listp);	
 		
-		List<CarritoDto> listc = repoC.findAllCarritoDto();
-		model.addAttribute("listCarrito", listc);	
+//		List<CarritoDto> listc = repoC.findAllCarritoDto();
+//		model.addAttribute("listCarrito", listc);	
 		
 		List<Categoria> listcat = repoCa.findAll();
 		model.addAttribute("listCategoria",listcat);
@@ -312,8 +309,7 @@ public class CarritoWebController {
 		//Se genera la venta
 		Calendar calendar = Calendar.getInstance();
         Date date =  calendar.getTime();
-		Venta v = new Venta(carr,total,date);
-		repoV.save(v);
+
 		
 		//Se muestra reporte-factura
 		
@@ -326,12 +322,12 @@ public class CarritoWebController {
 	@RequestMapping("/listarCarritos")
 	public String listarCarritos(Model model) 
 	{		
-		List<CarritoDto> listCarr = repoC.findAllCarritoDto();
-		//List<Carrito> listarCarrNew = new ArrayList<Carrito>(); 
-		//this.migrarDeCarritoDtoACarrito(listCarr, listarCarrNew);
-		model.addAttribute("counter", new Counter());
-		model.addAttribute("lista", listCarr);
-		model.addAttribute("content", "listasCarr"); 
+//		List<CarritoDto> listCarr = repoC.findAllCarritoDto();
+//		//List<Carrito> listarCarrNew = new ArrayList<Carrito>(); 
+//		//this.migrarDeCarritoDtoACarrito(listCarr, listarCarrNew);
+//		model.addAttribute("counter", new Counter());
+//		model.addAttribute("lista", listCarr);
+//		model.addAttribute("content", "listasCarr"); 
 		return "index";
 	}
 	
@@ -347,22 +343,23 @@ public class CarritoWebController {
 	{	
 		
 		
-		List<CarritoDto> listaProd = repoC.findAllCarritoDtoById(id);
-		float total1 = repoC.findAllCarritoDtoByIdTotal(id);
+//		List<CarritoDto> listaProd = repoC.findAllCarritoDtoById(id);
+//		float total1 = repoC.findAllCarritoDtoByIdTotal(id);
+//
+//		String reportJrxml = "factura.jrxml";
+//		// Generar PDF
+//		ReportGenerator rg = new ReportGenerator();
+//		rg.generatePdfReportFactura(id,reportJrxml,listaProd,total1);
+//		// Download la factura 	      
+//	    Path path = Paths.get("/home/ccalomino/Escritorio/Sist-Venta/workspace-2/carritoWeb/src/main/resources/reports/factura.pdf");
+//	    byte[] data = Files.readAllBytes(path);			
+//		ByteArrayResource inputStreamResourcePDF = new ByteArrayResource(data);	
+//		String fileName = "factura"+""+".pdf";		
+//		
+//		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName).contentType(MediaType.APPLICATION_PDF)
+//				.contentLength(inputStreamResourcePDF.contentLength()).body(inputStreamResourcePDF);
 
-		String reportJrxml = "factura.jrxml";
-		// Generar PDF
-		ReportGenerator rg = new ReportGenerator();
-		rg.generatePdfReportFactura(id,reportJrxml,listaProd,total1);
-		// Download la factura 	      
-	    Path path = Paths.get("/home/ccalomino/Escritorio/Sist-Venta/workspace-2/carritoWeb/src/main/resources/reports/factura.pdf");
-	    byte[] data = Files.readAllBytes(path);			
-		ByteArrayResource inputStreamResourcePDF = new ByteArrayResource(data);	
-		String fileName = "factura"+""+".pdf";		
-		
-		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName).contentType(MediaType.APPLICATION_PDF)
-				.contentLength(inputStreamResourcePDF.contentLength()).body(inputStreamResourcePDF);
-
+		return null;
 //		
 //		
 //		
