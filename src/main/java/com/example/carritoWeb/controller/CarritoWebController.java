@@ -35,12 +35,14 @@ import com.example.carritoWeb.model.Producto;
 import com.example.carritoWeb.model.ProductosEnCarrito;
 import com.example.carritoWeb.model.Ubicacion;
 import com.example.carritoWeb.model.Usuario;
+import com.example.carritoWeb.model.Venta;
 import com.example.carritoWeb.repo.ICarritoRepo;
 import com.example.carritoWeb.repo.ICategoriaRepo;
 import com.example.carritoWeb.repo.IProductoRepo;
 import com.example.carritoWeb.repo.IProductosEnCarritoRepo;
 import com.example.carritoWeb.repo.IUbicacionRepo;
 import com.example.carritoWeb.repo.IUsuarioRepo;
+import com.example.carritoWeb.repo.IVentaRepo;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -56,7 +58,8 @@ public class CarritoWebController {
 	private IProductoRepo repoP;
 	@Autowired
 	private ICarritoRepo repoC;
-
+	@Autowired
+	private IVentaRepo repoV;
 	@Autowired
 	private IProductosEnCarritoRepo repoPC;
 	@Autowired
@@ -106,7 +109,7 @@ public class CarritoWebController {
 	}
 	
 	@RequestMapping("/new")
-	public String showNewUserPage(Model model) {
+	public String showNewUserPage(Model model, HttpServletRequest request) {
 		Usuario u = new Usuario();
 		model.addAttribute("user", u);	
 		model.addAttribute("content", "newUser"); 
@@ -124,13 +127,14 @@ public class CarritoWebController {
 		repoUbic.save(ub);
 		user.setIdUbic(ub);
 		
-		int us = (int) request.getSession().getAttribute("idUsuSession");
-		Usuario u2 = repoU.findByidUsu(us);
-		u2.setIdUbic(user.getIdUbic());
-
-		
-
-		repoU.save(u2);
+		if (request.getSession() != null && request.getSession().getAttribute("idUsuSession")!=null) {
+			int us = (int) request.getSession().getAttribute("idUsuSession");
+			Usuario u2 = repoU.findByidUsu(us);
+			u2.setIdUbic(user.getIdUbic());		
+			repoU.save(u2);
+		}
+		else
+			repoU.save(user);
 		
 		return "redirect:/";
 	}
@@ -309,6 +313,8 @@ public class CarritoWebController {
 		//Se genera la venta
 		Calendar calendar = Calendar.getInstance();
         Date date =  calendar.getTime();
+		Venta v = new Venta(carr,total,date);
+		repoV.save(v);
 
 		
 		//Se muestra reporte-factura
@@ -322,12 +328,12 @@ public class CarritoWebController {
 	@RequestMapping("/listarCarritos")
 	public String listarCarritos(Model model) 
 	{		
-//		List<CarritoDto> listCarr = repoC.findAllCarritoDto();
-//		//List<Carrito> listarCarrNew = new ArrayList<Carrito>(); 
-//		//this.migrarDeCarritoDtoACarrito(listCarr, listarCarrNew);
-//		model.addAttribute("counter", new Counter());
-//		model.addAttribute("lista", listCarr);
-//		model.addAttribute("content", "listasCarr"); 
+		List<CarritoDto> listCarr = repoC.findAllCarritoDto();
+		//List<Carrito> listarCarrNew = new ArrayList<Carrito>(); 
+		//this.migrarDeCarritoDtoACarrito(listCarr, listarCarrNew);
+		model.addAttribute("counter", new Counter());
+		model.addAttribute("lista", listCarr);
+		model.addAttribute("content", "listasCarr"); 
 		return "index";
 	}
 	
@@ -343,23 +349,22 @@ public class CarritoWebController {
 	{	
 		
 		
-//		List<CarritoDto> listaProd = repoC.findAllCarritoDtoById(id);
-//		float total1 = repoC.findAllCarritoDtoByIdTotal(id);
-//
-//		String reportJrxml = "factura.jrxml";
-//		// Generar PDF
-//		ReportGenerator rg = new ReportGenerator();
-//		rg.generatePdfReportFactura(id,reportJrxml,listaProd,total1);
-//		// Download la factura 	      
-//	    Path path = Paths.get("/home/ccalomino/Escritorio/Sist-Venta/workspace-2/carritoWeb/src/main/resources/reports/factura.pdf");
-//	    byte[] data = Files.readAllBytes(path);			
-//		ByteArrayResource inputStreamResourcePDF = new ByteArrayResource(data);	
-//		String fileName = "factura"+""+".pdf";		
-//		
-//		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName).contentType(MediaType.APPLICATION_PDF)
-//				.contentLength(inputStreamResourcePDF.contentLength()).body(inputStreamResourcePDF);
+		List<CarritoDto> listaProd = repoC.findAllCarritoDtoById(id);
+		float total1 = repoC.findAllCarritoDtoByIdTotal(id);
 
-		return null;
+		String reportJrxml = "factura.jrxml";
+		// Generar PDF
+		ReportGenerator rg = new ReportGenerator();
+		rg.generatePdfReportFactura(id,reportJrxml,listaProd,total1);
+		// Download la factura 	      
+	    Path path = Paths.get("/home/ccalomino/Escritorio/Sist-Venta/workspace-2/carritoWeb/src/main/resources/reports/factura.pdf");
+	    byte[] data = Files.readAllBytes(path);			
+		ByteArrayResource inputStreamResourcePDF = new ByteArrayResource(data);	
+		String fileName = "factura"+""+".pdf";		
+		
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName).contentType(MediaType.APPLICATION_PDF)
+				.contentLength(inputStreamResourcePDF.contentLength()).body(inputStreamResourcePDF);
+
 //		
 //		
 //		

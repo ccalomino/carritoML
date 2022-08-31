@@ -2,22 +2,29 @@ package com.example.carritoWeb.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.carritoWeb.comparator.ComparatorString;
 import com.example.carritoWeb.dto.ProductoMLDto;
 import com.example.carritoWeb.dto.ProductoMLDto2;
 import com.example.carritoWeb.model.ProductoML;
@@ -32,6 +39,41 @@ public class ProductoMLWebController {
 
 	// -------------------------------------------------------------------------------------------------
 	// -------------------------------------------------------------------------------------------------
+
+	private List<String> toPivote(List<String> list, String pivote)
+	{
+		List<String> n = new ArrayList<String>();
+		for (int i=0; i<list.size(); i++)
+		{
+			if (list.get(i).compareTo(pivote) <= 0) {
+				n.add(list.get(i));
+				if (list.get(i).compareTo(pivote) == 0) {
+					return n;
+				}
+			}
+		}
+		return n;
+	}
+	
+	@RequestMapping(value="/ordenada", method=RequestMethod.GET)
+	public @ResponseBody List<String> getOrdenada(@RequestParam(value = "list",required = false) List<String> list, @RequestParam(value="pivote") String pivote){
+		//Collections.sort(list);
+		Collections.sort(list,new ComparatorString());
+		List<String> n = this.toPivote(list, pivote);
+		return n;		
+	}
+	
+	@RequestMapping(value="/insertar", method=RequestMethod.POST)
+	public List<String> insert(Model model, HttpSession session,@RequestParam(value = "list",required = false) List<String> list, @RequestParam(value="pivote") String pivote)throws IOException{	
+		list.add(pivote);
+		Collections.sort(list,new ComparatorString());
+		return list;		
+	}
+	
+
+	// -------------------------------------------------------------------------------------------------
+	// -------------------------------------------------------------------------------------------------
+
 	@RequestMapping("/hello")
 	public String hello() {
 		return "Hellooooo";
