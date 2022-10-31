@@ -29,6 +29,7 @@ import com.example.carritoWeb.repo.IProductoRepo;
 import com.example.carritoWeb.service.ProductoService;
 
 @Controller
+@RequestMapping(path = "/productos")
 public class ProductoWebController {
 
 	@Autowired
@@ -104,7 +105,7 @@ public class ProductoWebController {
 		public String deleteProduct(@PathVariable(name = "id") int id) {
 			Producto p = repoP.findByidProd(id);
 			repoP.delete(p);
-			return "redirect:/";		
+			return "redirect:/productos/listarProductos";		
 		}
 		
 		
@@ -112,21 +113,27 @@ public class ProductoWebController {
 		public String saveProd(@ModelAttribute("product") Producto product, HttpServletRequest request, @RequestParam("image") MultipartFile multipartFile, BindingResult result) throws IOException 
 		{
 			int ps = (int) request.getSession().getAttribute("idProdSession");
+			Producto product2 = new Producto();
 			
-			if (ps!=-1)
+			if (ps!=-1) {
 				product.setIdProd(ps);
+				product2 = repoP.findByidProd(ps);
+			}
+			
+			
 			
 			 if (result.hasErrors()) {			
 			        return "xxxx";
 			    }
 			 
-			 if (multipartFile.getSize() == 0)
-				 product.setImg(null);
-			 else
+			 if (multipartFile.getSize() != 0)
 				 product.setImg(multipartFile.getBytes());
+			 else
+				 product.setImg(product2.getImg());
+
 			
 			repoP.save(product);	
-			return "redirect:/listarProductos";
+			return "redirect:/productos/listarProductos";
 		}
 		
 		

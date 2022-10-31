@@ -1,5 +1,6 @@
 package com.example.carritoWeb.model;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -21,6 +22,9 @@ public class Carrito {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idCarrito;
+	
+	@Column(name = "fecha")
+	private Date fecha;
 	
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "usuario_id")
@@ -70,6 +74,14 @@ public class Carrito {
 
 	public void setProductosEnCarrito(List<ProductosEnCarrito> productosEnCarrito) {
 		this.productosEnCarrito = productosEnCarrito;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 
 

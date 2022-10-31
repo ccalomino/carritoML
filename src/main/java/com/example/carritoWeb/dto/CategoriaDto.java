@@ -2,9 +2,9 @@ package com.example.carritoWeb.dto;
 
 public interface CategoriaDto {
 	
-	int getIdCateg();
+	int getId_categ();
 	String getNombre();
 	String getDescripcion();
-
+	byte getImg();
 
 }

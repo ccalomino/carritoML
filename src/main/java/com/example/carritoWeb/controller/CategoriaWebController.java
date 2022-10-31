@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,16 +21,21 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.carritoWeb.model.Categoria;
 import com.example.carritoWeb.model.Producto;
 import com.example.carritoWeb.repo.ICategoriaRepo;
+import com.example.carritoWeb.service.CarritoWebService;
 
 import groovy.ui.Console;
 
 
 @Controller
+@RequestMapping(path = "/categorias")
 public class CategoriaWebController {
 
 
+//@Autowired
+//private ICategoriaRepo repoCa;
+
 @Autowired
-private ICategoriaRepo repoCa;
+private CarritoWebService serv;
 
 
 // --------------------------------------------------------------------------------------------
@@ -39,7 +45,7 @@ private ICategoriaRepo repoCa;
 	@RequestMapping("/listarCategorias")
 	public String listarCategorias(Model model) 
 	{
-		List<Categoria> list = repoCa.findAll();
+		List<Categoria> list = serv.findAllCategoriasSort();
 		model.addAttribute("listCategoria", list);
 		model.addAttribute("content", "listasCateg"); 
 		return "index";
@@ -56,8 +62,8 @@ private ICategoriaRepo repoCa;
 	
 	@RequestMapping("/addCateg/{id}")
 	public String addCateg(@PathVariable(name = "id") int id) {
-		Categoria c = repoCa.findByidCateg(id);
-		repoCa.save(c);
+		Categoria c = serv.findByIdCat(id);
+		serv.saveCat(c);
 		return "redirect:/";		
 	}	
 	
@@ -79,22 +85,22 @@ private ICategoriaRepo repoCa;
 		 else
 			 categ.setImg(multipartFile.getBytes());
 		 
-		repoCa.save(categ);	
-		return "redirect:/listarCategorias";
+		serv.saveCat(categ);	
+		return "redirect:/categorias/listarCategorias";
 	}
 	
 	
 	@RequestMapping("/deleteCateg/{id}")
 	public String deleteCateg(@PathVariable(name = "id") int id) {
-		Categoria c = repoCa.findByidCateg(id);
-		repoCa.delete(c);
-		return "redirect:/listarCategorias";		
+		Categoria c = serv.findByIdCat(id);
+		serv.deleteCat(c);
+		return "redirect:/categorias/listarCategorias";		
 	}	
 
 	@RequestMapping("/editCateg/{id}")
 	public ModelAndView showEditCategPage(@PathVariable(name = "id") int id, HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView("index");
-		Categoria c = repoCa.findByidCateg(id);
+		Categoria c = serv.findByIdCat(id);
 		mav.addObject("categ", c);
 		
 		if (c.getImg()!=null)

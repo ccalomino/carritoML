@@ -56,7 +56,7 @@ public class Producto {
     
     @Lob
     @Column(name="img", length=100000)
-    @Type(type = "org.hibernate.type.ImageType")
+    //@Type(type = "org.hibernate.type.ImageType")
     private byte[] img;
 	
     

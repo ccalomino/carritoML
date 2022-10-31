@@ -21,5 +21,6 @@ public interface ICategoriaRepo extends JpaRepository<Categoria, Integer>{
 	
 	@Query(value = "select * from categria order by id_prod", nativeQuery = true)
     List<CategoriaDto> findAllCategoriaDto();
+	
 }
 

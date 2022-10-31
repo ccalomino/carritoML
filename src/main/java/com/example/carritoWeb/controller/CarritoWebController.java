@@ -14,17 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.carritoWeb.ReportGenerator;
@@ -33,133 +29,24 @@ import com.example.carritoWeb.model.Carrito;
 import com.example.carritoWeb.model.Categoria;
 import com.example.carritoWeb.model.Producto;
 import com.example.carritoWeb.model.ProductosEnCarrito;
-import com.example.carritoWeb.model.Ubicacion;
 import com.example.carritoWeb.model.Usuario;
 import com.example.carritoWeb.model.Venta;
-import com.example.carritoWeb.repo.ICarritoRepo;
-import com.example.carritoWeb.repo.ICategoriaRepo;
-import com.example.carritoWeb.repo.IProductoRepo;
-import com.example.carritoWeb.repo.IProductosEnCarritoRepo;
-import com.example.carritoWeb.repo.IUbicacionRepo;
-import com.example.carritoWeb.repo.IUsuarioRepo;
-import com.example.carritoWeb.repo.IVentaRepo;
+import com.example.carritoWeb.service.CarritoWebService;
 
 import net.sf.jasperreports.engine.JRException;
 
 @Controller
+@RequestMapping(path = "/carritos")
 public class CarritoWebController {
 
-//	@Autowired
-//	private BCryptPasswordEncoder enc;
-//	
 	@Autowired
-	private IUsuarioRepo repoU;
-	@Autowired
-	private IProductoRepo repoP;
-	@Autowired
-	private ICarritoRepo repoC;
-	@Autowired
-	private IVentaRepo repoV;
-	@Autowired
-	private IProductosEnCarritoRepo repoPC;
-	@Autowired
-	private ICategoriaRepo repoCa;
-	@Autowired
-	private IUbicacionRepo repoUbic;
+	private CarritoWebService serv;
+
 
 	
 	
-	// --------------------------------------------------------------------------------------------
-	// -------------------------------HOME------------------------------
-	// --------------------------------------------------------------------------------------------
-	
-	@RequestMapping("/")
-	public String viewHomePage(Model model) 
-	{
-		List<Usuario> list = repoU.findAll();
-		model.addAttribute("listUser", list);	
-		
-		List<Producto> listp = repoP.findAll();
-		model.addAttribute("listProd", listp);	
-		
-//		List<CarritoDto> listc = repoC.findAllCarritoDto();
-//		model.addAttribute("listCarrito", listc);	
-		
-		List<Categoria> listcat = repoCa.findAll();
-		model.addAttribute("listCategoria",listcat);
-		
-		//model.addAttribute("content", "listas"); 
-		model.addAttribute("content", "principal"); 
-		return "index";
-	}
-	
-	
-	
-	// --------------------------------------------------------------------------------------------
-	// -------------------------------USUARIO------------------------------
-	// --------------------------------------------------------------------------------------------
 
-	@RequestMapping("/listarUsuarios")
-	public String listarUsuarios(Model model) 
-	{
-		List<Usuario> list = repoU.findAll();
-		model.addAttribute("listUser", list);
-		model.addAttribute("content", "listasUsu"); 
-		return "index";
-	}
-	
-	@RequestMapping("/new")
-	public String showNewUserPage(Model model, HttpServletRequest request) {
-		Usuario u = new Usuario();
-		model.addAttribute("user", u);	
-		model.addAttribute("content", "newUser"); 
-		return "index";
-	}
-	
-	
-	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public String saveUser(@ModelAttribute("user") Usuario user, HttpServletRequest request) {
-		//user.setClave(enc.encode(user.getClave()));
-		
-		Ubicacion ub = new Ubicacion();
-		ub.setLatitud(user.getIdUbic().getLatitud());
-		ub.setLongitud(user.getIdUbic().getLongitud());
-		repoUbic.save(ub);
-		user.setIdUbic(ub);
-		
-		if (request.getSession() != null && request.getSession().getAttribute("idUsuSession")!=null) {
-			int us = (int) request.getSession().getAttribute("idUsuSession");
-			Usuario u2 = repoU.findByidUsu(us);
-			u2.setIdUbic(user.getIdUbic());		
-			repoU.save(u2);
-		}
-		else
-			repoU.save(user);
-		
-		return "redirect:/";
-	}
-	
-	@RequestMapping("/edit/{id}")
-	public ModelAndView showEditUserPage(@PathVariable(name = "id") int id, HttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("index");
-		Usuario u = repoU.findByidUsu(id);
-		mav.addObject("idUsu",id);
-		mav.addObject("user", u);	
-		mav.addObject("content", "editUser"); 
-		request.getSession().setAttribute("idUsuSession", u.getIdUsu());
-		return mav;
-	}
-	
-	@RequestMapping("/delete/{id}")
-	public String deleteUser(@PathVariable(name = "id") int id) {
-		Usuario u = repoU.findByidUsu(id);
-		repoU.delete(u);
-		return "redirect:/";		
-	}
-	
-	
 
-	
 	
 	
 	// --------------------------------------------------------------------------------------------
@@ -209,12 +96,30 @@ public class CarritoWebController {
 		model.addAttribute("carrito", c);
 		request.getSession().setAttribute("carrito", c);
 		
-		List<Usuario> list = repoU.findAll();
+		List<Usuario> list = serv.findAllUsuarios();
 		model.addAttribute("listUser", list);	
 		
-		List<Producto> listp = repoP.findAll(Sort.by(Sort.Direction.ASC, "idProd"));
-		model.addAttribute("listProd", listp);
-			
+		
+		@SuppressWarnings("unchecked")
+		List<Producto> listp2 = (List<Producto>) request.getSession().getAttribute("listProd");
+		
+		if (listp2 == null) {
+			List<Producto> listp = serv.findAllProductos();
+			model.addAttribute("listProd", listp);			
+		}
+		else
+			model.addAttribute("listProd", listp2);
+		
+		List<Categoria> listc = serv.findAllCategorias();
+		model.addAttribute("listaCat", listc);
+		
+		
+		@SuppressWarnings("unused")
+		int idComboCat = 0;
+		if (request.getSession().getAttribute("idComboCat") != null)
+			idComboCat = (int) request.getSession().getAttribute("idComboCat");
+		
+		model.addAttribute("idComboCat", idComboCat);
 		model.addAttribute("content", "newCarr"); 
 		return "index";
 	}
@@ -231,7 +136,7 @@ public class CarritoWebController {
 	@RequestMapping("/agregarAlCarrito/{id}")
 	public String agregarAlCarrito(Model model, HttpServletRequest request, RedirectAttributes redirectAttrs, @PathVariable(name = "id") int id) {
 	    ArrayList<ProductosEnCarrito> carrito = this.obtenerCarrito(request);
-	    Producto p = repoP.findByidProd(id);
+	    Producto p = serv.findProductoByidProd(id);
 	    
 	    if (p.getStock()!=0) 
 	    {
@@ -247,7 +152,8 @@ public class CarritoWebController {
 		    
 		    }
 		    p.decrementarStock();
-		    repoP.save(p);
+		   
+		    serv.saveProducto(p);
 		    	
 		   float total = this.obtenerTotal(carrito);  
 		   request.getSession().setAttribute("totalCarrito", total);
@@ -259,7 +165,7 @@ public class CarritoWebController {
 	    }
 	     
 	    
-	    return "redirect:/newCarr/";
+	    return "redirect:/carritos/newCarr/";
 	}
 	
 	
@@ -269,28 +175,47 @@ public class CarritoWebController {
 		ArrayList<ProductosEnCarrito> carrito = this.obtenerCarrito(request);
 		// Devolver el producto al stock
 		ProductosEnCarrito pc = carrito.get(id);
-		Producto p = repoP.findByidProd(pc.getProd().getIdProd());
+		Producto p = serv.findProductoByidProd(pc.getProd().getIdProd());
 		p.devolucionStock(pc.getCantidad());
-		repoP.save(p);
+		serv.saveProducto(p);
 		
 		carrito.remove(id);
 		float total = this.obtenerTotal(carrito);  
 		request.getSession().setAttribute("totalCarrito", total);
 		this.guardarCarrito(carrito, request); 
-		return "redirect:/newCarr/";
+		return "redirect:/carritos/newCarr/";
 	}
 	
 	
 	@RequestMapping("/seleccionarUsu/{id}")
 	public String agregarUsuarioAlCarrito(Model model, HttpServletRequest request, RedirectAttributes redirectAttrs, @PathVariable(name = "id") int id) {
-		Usuario u = repoU.findByidUsu(id);
+		Usuario u = serv.findUsuarioByidUsu(id);
 		//Carrito c = (Carrito) model.getAttribute("carrito");
 		Carrito c = (Carrito) request.getSession().getAttribute("carrito");
 		c.setUsuario_id(u);
 		model.addAttribute("carrito", c);
 		request.getSession().setAttribute("carrito",c);
-		return "redirect:/newCarr/";
+		return "redirect:/carritos/newCarr/";
 	}
+	
+	
+	@RequestMapping("/filtrarCategoria/{id}")
+	public String filtrarCategoria(Model model, HttpServletRequest request, RedirectAttributes redirectAttrs, @PathVariable(name = "id") int id) {
+		
+		List<Producto> listFiltrada;
+		if (id==0)
+			listFiltrada = serv.findAllProductos();
+		else
+			listFiltrada = serv.findAllProductosByCateg(id);
+		
+		model.addAttribute("listProd", listFiltrada);
+		request.getSession().setAttribute("listProd",listFiltrada);
+		request.getSession().setAttribute("idComboCat", id);
+
+		return "redirect:/carritos/newCarr/";
+	}
+	
+	
 	
 	@RequestMapping("/saveCarr")
 	public String saveCarrito(Model model, HttpServletRequest request) {
@@ -299,36 +224,48 @@ public class CarritoWebController {
 		Carrito carr = (Carrito) request.getSession().getAttribute("carrito"); 
 		@SuppressWarnings("unchecked")
 		ArrayList<ProductosEnCarrito> carritoA = (ArrayList<ProductosEnCarrito>) request.getSession().getAttribute("carritoArray");
-		Float total = (Float) request.getSession().getAttribute("totalCarrito");		
-		carr.setProductosEnCarrito(carritoA);
-		Carrito carrSaved = repoC.save(carr);
-		//--------------------------------------------------------------	
-		//Se guarda los prod en carrito
-		for (int i=0; i<carritoA.size();i++){
-			ProductosEnCarrito pc = carritoA.get(i);
-			pc.setCarr(carrSaved);
-			repoPC.save(pc);	
+		
+		if (carritoA != null)
+		{
+			
+			Float total = (Float) request.getSession().getAttribute("totalCarrito");	
+			carr.setProductosEnCarrito(carritoA);
+			//-------------------------------------------------------------
+			Calendar calendar = Calendar.getInstance();
+			Date date =  calendar.getTime();
+			//-------------------------------------------------------------
+			carr.setFecha(date);
+			Carrito carrSaved = serv.saveCarrito(carr);
+			//--------------------------------------------------------------	
+			//Se guarda los prod en carrito
+			for (int i=0; i<carritoA.size();i++){
+				ProductosEnCarrito pc = carritoA.get(i);
+				pc.setCarr(carrSaved);
+				serv.saveProductosEnCarrito(pc)	;
+			}
+			//--------------------------------------------------------------				
+			//Se genera la venta			
+			Venta v = new Venta(carr,total,date);
+			serv.saveVenta(v);
+			
+			return "redirect:/carritos/listarCarritos/";
+			
 		}
-		//--------------------------------------------------------------				
-		//Se genera la venta
-		Calendar calendar = Calendar.getInstance();
-        Date date =  calendar.getTime();
-		Venta v = new Venta(carr,total,date);
-		repoV.save(v);
+
 
 		
 		//Se muestra reporte-factura
 		
+		return "redirect:/carritos/newCarr";
 		
 		
-		return "redirect:/newCarr/";
 	}
 	
 	
 	@RequestMapping("/listarCarritos")
 	public String listarCarritos(Model model) 
 	{		
-		List<CarritoDto> listCarr = repoC.findAllCarritoDto();
+		List<CarritoDto> listCarr = serv.findAllCarritoDto();
 		//List<Carrito> listarCarrNew = new ArrayList<Carrito>(); 
 		//this.migrarDeCarritoDtoACarrito(listCarr, listarCarrNew);
 		model.addAttribute("counter", new Counter());
@@ -349,8 +286,8 @@ public class CarritoWebController {
 	{	
 		
 		
-		List<CarritoDto> listaProd = repoC.findAllCarritoDtoById(id);
-		float total1 = repoC.findAllCarritoDtoByIdTotal(id);
+		List<CarritoDto> listaProd = serv.findAllCarritoDtoById(id);
+		float total1 = serv.findAllCarritoDtoByIdTotal(id);
 
 		String reportJrxml = "factura.jrxml";
 		// Generar PDF

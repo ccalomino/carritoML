@@ -2,7 +2,7 @@
 
 <div class="">
        
-        <form th:object="${carrito}" th:action="@{/saveCarr}" method="post">
+        <form th:object="${carrito}" th:action="@{/carritos/saveCarr}" method="post">
         	
         	<table class="table">
         		<tr>
@@ -21,7 +21,7 @@
 							            <tr th:each="us : ${listUser}">
 							                <td th:text="${us.nombre}">Name</td>
 							                <td>
-							                	<a th:href="@{'/seleccionarUsu/' + ${us.idUsu}}" class="btn btn-warning">Seleccionar</a>
+							                	<a th:href="@{'/carritos/seleccionarUsu/' + ${us.idUsu}}" class="btn btn-warning">Seleccionar</a>
 							                	<img th:if="${carrito.usuario_id != null && carrito.usuario_id.idUsu == us.idUsu}" th:src="@{'/images/cliente.png'}" style="height: 10px;width: 10px;"/>
 							                </td>							            
 							            </tr>
@@ -36,7 +36,16 @@
 				  
 				  
 				  <td style="width:30%">
-				  			 <h2>Productos</h2>
+				  
+				  			<h2>Categorías</h2>
+				  			<div>
+				  				 <select class="form-control" id="idCateg" th:onchange="'window.location.href = \'' + @{/carritos/filtrarCategoria/} + '\' + this.value ' ">
+    								<option th:value="0">Todos</option>
+    								<option th:each="categ : ${listaCat}" th:value="${categ.idCateg}" th:text="${categ.nombre}" th:selected="(${categ.idCateg == idComboCat})"></option>   						
+    							</select>
+				  			</div>
+				  
+				  			<h2>Productos</h2>
 							<div class="table">
 					            <table class="">
 							        <thead>
@@ -52,7 +61,7 @@
 							                <td th:text="${p.nombre}">Name</td>
 							                <td th:text="${p.precio}">Brand</td>
 							                <td>
-							                	<a th:href="@{'/agregarAlCarrito/' + ${p.idProd}}" class="btn btn-warning">Agregar</a>
+							                	<a th:href="@{'/carritos/agregarAlCarrito/' + ${p.idProd}}" class="btn btn-warning">Agregar</a>
 							                </td>
 							                <td>					                	
 							                	<img th:if="${p.img == null}" th:src="@{'/images/productos.png'}" style="height: 30px;width: 30px;"/>
@@ -136,7 +145,7 @@
 						                    <td th:text="${productoCarr.cantidad}" style="text-align: center;vertical-align: middle;"></td>
 						                    <td th:text="'$ ' + ${productoCarr.total}" style="text-align: center;vertical-align: middle;"></td>
 						                    <td style="text-align: center;vertical-align: middle;">
-						                    <a th:href="@{'/eliminarDelCarrito/'}+ ${iterador.index}" class="btn btn-danger fa fa-trash"/> 
+						                    <a th:href="@{'/carritos/eliminarDelCarrito/'}+ ${iterador.index}" class="btn btn-danger fa fa-trash"/> 
 						                    </td >
 						                </tr>
 						                <tr>

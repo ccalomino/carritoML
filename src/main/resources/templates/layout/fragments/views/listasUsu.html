@@ -9,7 +9,7 @@
 		             th:text="${mensaje}"
 		             class="alert">
 		        </div>
-		        <a class="btn btn-success mb-2" th:href="@{/new}">Agregar</a>
+		        <a class="btn btn-success mb-2" th:href="@{/usuarios/new}">Agregar</a>
 		        <div class="table-responsive">
 		            <table class="table table-bordered table-striped" id="rwd-table-id">
 				        <thead>
@@ -27,10 +27,10 @@
 				                <td th:text="${us.idUbic.latitud}">Lat</td>
 				                 <td th:text="${us.idUbic.longitud}">Long</td>
 				                <td>
-				                	<a th:href="@{'/edit/' + ${us.idUsu}}" class="btn btn-warning">Editar</a>
+				                	<a th:href="@{'/usuarios/edit/' + ${us.idUsu}}" class="btn btn-warning">Editar</a>
 				                </td>
 				                <td>
-				                	<a th:href="@{'/delete/' + ${us.idUsu}}" class="btn btn-danger">Borrar</a>
+				                	<a th:href="@{'/usuarios/delete/' + ${us.idUsu}}" class="btn btn-danger">Borrar</a>
 				                </td>
 				            </tr>
 				        </tbody >

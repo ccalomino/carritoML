@@ -5,7 +5,7 @@
              th:text="${mensaje}"
              class="alert">
         </div>
-        <a class="btn btn-success mb-2" th:href="@{/newCateg}">Agregar</a>
+        <a class="btn btn-success mb-2" th:href="@{/categorias/newCateg}">Agregar</a>
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
 		        <thead>
@@ -32,10 +32,10 @@
 		               
                        
 		                <td>
-		                	<a th:href="@{'/editCateg/' + ${ca.idCateg}}" class="btn btn-warning">Editar</a>
+		                	<a th:href="@{'/categorias/editCateg/' + ${ca.idCateg}}" class="btn btn-warning">Editar</a>
 		                </td>
 		                <td>
-		                	<a th:href="@{'/deleteCateg/' + ${ca.idCateg}}" class="btn btn-danger">Borrar</a>
+		                	<a th:href="@{'/categorias/deleteCateg/' + ${ca.idCateg}}" class="btn btn-danger">Borrar</a>
 		                </td>
 		            </tr>
 		        </tbody>

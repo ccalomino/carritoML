@@ -6,7 +6,7 @@
              th:text="${mensaje}"
              class="alert">
         </div>
-        <form th:object="${product}" th:action="@{/saveProd}" method="post" enctype="multipart/form-data">
+        <form th:object="${product}" th:action="@{/productos/saveProd}" method="post" enctype="multipart/form-data">
  	       	<div class="form-group">
                 <label for="product">Nombre del producto</label>
                 <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"

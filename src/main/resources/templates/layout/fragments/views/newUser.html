@@ -6,7 +6,7 @@
              th:text="${mensaje}"
              class="alert">
         </div>
-        <form th:object="${user}" th:action="@{/save}" method="post">
+        <form th:object="${user}" th:action="@{/usuarios/save}" method="post">
  	       	<div class="form-group">
                 <label for="nombre">Nombre del usuario</label>
                 <input autocomplete="off" autofocus th:field="*{nombre}" id="nombre"
