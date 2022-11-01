@@ -26,17 +26,17 @@ import com.example.carritoWeb.model.Categoria;
 import com.example.carritoWeb.model.Producto;
 import com.example.carritoWeb.repo.ICategoriaRepo;
 import com.example.carritoWeb.repo.IProductoRepo;
+import com.example.carritoWeb.service.CarritoWebService;
 import com.example.carritoWeb.service.ProductoService;
 
 @Controller
 @RequestMapping(path = "/productos")
 public class ProductoWebController {
 
+
+
 	@Autowired
-	private IProductoRepo repoP;
-	
-	@Autowired
-	private ICategoriaRepo repoCa;
+	private CarritoWebService serv;
 	
     @Autowired
     private ProductoService productoService;
@@ -83,10 +83,10 @@ public class ProductoWebController {
 		@RequestMapping("/editProd/{id}")
 		public ModelAndView showEditProductPage(@PathVariable(name = "id") int id, HttpServletRequest request) {
 			ModelAndView mav = new ModelAndView("index");
-			Producto p = repoP.findByidProd(id);
+			Producto p = serv.findProductoByidProd(id);
 			mav.addObject("product", p);
 			
-			List<Categoria> list = repoCa.findAll();
+			List<Categoria> list = serv.findAllCategorias();
 			mav.addObject("listaCat", list);
 
 			
@@ -103,8 +103,8 @@ public class ProductoWebController {
 		
 		@RequestMapping("/deleteProd/{id}")
 		public String deleteProduct(@PathVariable(name = "id") int id) {
-			Producto p = repoP.findByidProd(id);
-			repoP.delete(p);
+			Producto p = serv.findProductoByidProd(id);
+			serv.deleteProducto(p);
 			return "redirect:/productos/listarProductos";		
 		}
 		
@@ -117,7 +117,7 @@ public class ProductoWebController {
 			
 			if (ps!=-1) {
 				product.setIdProd(ps);
-				product2 = repoP.findByidProd(ps);
+				product2 = serv.findProductoByidProd(ps);
 			}
 			
 			
@@ -131,8 +131,7 @@ public class ProductoWebController {
 			 else
 				 product.setImg(product2.getImg());
 
-			
-			repoP.save(product);	
+			serv.saveProducto(product);
 			return "redirect:/productos/listarProductos";
 		}
 		
@@ -144,7 +143,7 @@ public class ProductoWebController {
 	        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 	        prod.setImg(fileName.getBytes());
 	         
-	        Producto savedProd = repoP.save(prod);
+	        Producto savedProd = serv.saveProductoGet(prod);
 	 
 	        String uploadDir = "img/" + savedProd.getIdProd();
 	 

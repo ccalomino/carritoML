@@ -37,6 +37,10 @@ public interface CarritoWebService {
 	
 	public void saveProducto(Producto p);
 	
+	public Producto saveProductoGet(Producto p);
+	
+	public void deleteProducto(Producto p);
+	
 	// --------------------------------------------------------------------------------------------
 
 	public List<Categoria> findAllCategorias();
@@ -46,6 +50,7 @@ public interface CarritoWebService {
 	public Categoria findByIdCat(int id);
 	
 	public List<Producto> findAllProductosByCateg(int id);
+	
 	
 	// --------------------------------------------------------------------------------------------
 	

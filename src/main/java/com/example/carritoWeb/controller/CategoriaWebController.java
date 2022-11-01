@@ -31,11 +31,9 @@ import groovy.ui.Console;
 public class CategoriaWebController {
 
 
-//@Autowired
-//private ICategoriaRepo repoCa;
-
-@Autowired
-private CarritoWebService serv;
+	
+	@Autowired
+	private CarritoWebService serv;
 
 
 // --------------------------------------------------------------------------------------------

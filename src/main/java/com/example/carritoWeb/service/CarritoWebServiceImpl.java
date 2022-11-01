@@ -93,12 +93,22 @@ public class CarritoWebServiceImpl implements CarritoWebService{
 	public void saveProducto(Producto p) {
 		repoP.save(p);
 	}
+	
+	@Override
+	public Producto saveProductoGet(Producto p) {
+		return repoP.save(p);
+	}
 
 	@Override
 	public List<Producto> findAllProductosByCateg(int id) {
 		List<Producto> list = repoP.findAllProductoByIdCategoria(id);
 		return list;
 	}	
+	
+	@Override
+	public void deleteProducto(Producto p) {
+		repoP.delete(p);
+	}
 
 	// --------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------
