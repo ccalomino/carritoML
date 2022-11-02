@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,11 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.carritoWeb.model.Categoria;
-import com.example.carritoWeb.model.Producto;
-import com.example.carritoWeb.repo.ICategoriaRepo;
 import com.example.carritoWeb.service.CarritoWebService;
-
-import groovy.ui.Console;
 
 
 @Controller

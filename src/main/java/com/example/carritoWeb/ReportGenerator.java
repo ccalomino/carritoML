@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.util.ResourceUtils;
 
 import com.example.carritoWeb.dto.CarritoDto;
-import com.example.carritoWeb.model.Producto;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;

@@ -114,7 +114,7 @@ public class CarritoWebController {
 		model.addAttribute("listaCat", listc);
 		
 		
-		@SuppressWarnings("unused")
+		
 		int idComboCat = 0;
 		if (request.getSession().getAttribute("idComboCat") != null)
 			idComboCat = (int) request.getSession().getAttribute("idComboCat");

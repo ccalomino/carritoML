@@ -18,8 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.Type;
-
 @Entity
 @Table(name="producto")
 public class Producto {

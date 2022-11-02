@@ -16,8 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.carritoWeb.model.Ubicacion;
 import com.example.carritoWeb.model.Usuario;
-import com.example.carritoWeb.repo.IUbicacionRepo;
-import com.example.carritoWeb.repo.IUsuarioRepo;
 import com.example.carritoWeb.service.CarritoWebService;
 
 @Controller

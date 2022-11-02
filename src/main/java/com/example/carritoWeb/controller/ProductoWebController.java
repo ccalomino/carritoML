@@ -24,8 +24,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.example.carritoWeb.file.FileUploadUtil;
 import com.example.carritoWeb.model.Categoria;
 import com.example.carritoWeb.model.Producto;
-import com.example.carritoWeb.repo.ICategoriaRepo;
-import com.example.carritoWeb.repo.IProductoRepo;
 import com.example.carritoWeb.service.CarritoWebService;
 import com.example.carritoWeb.service.ProductoService;
 
