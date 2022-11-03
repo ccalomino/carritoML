@@ -16,16 +16,16 @@
 				            <tr>
 				            	<th style="background-color:lavender;">ID</th >
 				                <th style="background-color:lavender;">Nombre</th >
-				                <th style="background-color:lavender;">Lat</th >	
-				          		<th style="background-color:lavender;">Long</th >		
+<!--				                <th style="background-color:lavender;">Lat</th >	
+				          		<th style="background-color:lavender;">Long</th >	-->	
 				            </tr>
 				        </thead>
 				        <tbody>
 				            <tr th:each="us : ${listUser}">
 				            	<td th:text="${us.idUsu}">Product ID</td>
 				                <td th:text="${us.nombre}">Name</td>
-				                <td th:text="${us.idUbic.latitud}">Lat</td>
-				                 <td th:text="${us.idUbic.longitud}">Long</td>
+<!--				                <td th:text="${us.idUbic.latitud}">Lat</td>
+				                 <td th:text="${us.idUbic.longitud}">Long</td>-->
 				                <td>
 				                	<a th:href="@{'/usuarios/edit/' + ${us.idUsu}}" class="btn btn-warning">Editar</a>
 				                </td>
@@ -39,11 +39,11 @@
 		        </div>
 			 </div>    
 			 
-			 
+<!--			 
 			 	<div class="col-5">
 					<h2>Localización</h2>
 					<div lang="en" th:replace="/layout/fragments/views/viewMapsLista :: mapsLista"> </div>
-				</div>
+				</div>-->
 	  </div>
 	  
 	</div>

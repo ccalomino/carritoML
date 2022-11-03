@@ -1,6 +1,9 @@
 package com.example.carritoWeb.service;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -62,11 +65,20 @@ public class CarritoWebServiceImpl implements CarritoWebService{
 		repoU.save(usu);
 	}	
 
+	@Override
+	public Usuario saveUsuGet(Usuario usu) {
+		return repoU.save(usu);
+	}	
 	
 	@Override
 	public void deleteUsu(Usuario usu) {
 		repoU.delete(usu);
 	}	
+	
+	@Override
+	public Usuario findUsuarioByNombre(String nombre) {
+		return (repoU.findByNombre(nombre));
+	}
 	
 	// --------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------
@@ -109,6 +121,31 @@ public class CarritoWebServiceImpl implements CarritoWebService{
 	public void deleteProducto(Producto p) {
 		repoP.delete(p);
 	}
+	
+	@Override
+	public void devolucionProductos(HttpServletRequest request) {
+		@SuppressWarnings("unchecked")
+		ArrayList<ProductosEnCarrito> carrito = (ArrayList<ProductosEnCarrito>) request.getSession().getAttribute("carritoArray");
+		if (carrito!=null) 
+		{
+			for (int i=0; i<carrito.size(); i++) 
+			{
+				ProductosEnCarrito pc = carrito.get(i);
+				Producto p = this.findProductoByidProd(pc.getProd().getIdProd());
+				p.setStock(p.getStock()+pc.getCantidad());
+				this.saveProducto(p);
+			}
+			
+		request.getSession().setAttribute("carritoArray",null);
+			
+		}
+	}
+	
+	@Override
+	public Producto findProductoByNombre(String nombre) {
+		return (repoP.findByNombre(nombre));
+	}
+	
 
 	// --------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------
@@ -132,8 +169,18 @@ public class CarritoWebServiceImpl implements CarritoWebService{
 	}
 	
 	@Override
+	public Categoria findByNombre(String nombre) {
+		return repoCa.findByNombre(nombre);
+	}
+	
+	@Override
 	public void saveCat(Categoria cat) {
 		repoCa.save(cat);
+	}
+	
+	@Override
+	public Categoria saveCatGet(Categoria cat) {
+		return repoCa.save(cat);
 	}
 
 	@Override
@@ -173,7 +220,8 @@ public class CarritoWebServiceImpl implements CarritoWebService{
 		repoPC.save(pc);
 	}	
 	
-
+	
+		
 	// --------------------------------------------------------------------------------------------
 	// --------------------------------------------------------------------------------------------
 

@@ -33,8 +33,11 @@ public class UsuarioWebController {
 	// --------------------------------------------------------------------------------------------
 
 	@RequestMapping("/listarUsuarios")
-	public String listarUsuarios(Model model) 
+	public String listarUsuarios(Model model, HttpServletRequest request) 
 	{
+		//Devolucion de productos si existe carrito previo
+		serv.devolucionProductos(request);
+		
 		List<Usuario> list = serv.findAllUsuarios();
 		model.addAttribute("listUser", list);
 		model.addAttribute("content", "listasUsu"); 
@@ -43,6 +46,9 @@ public class UsuarioWebController {
 	
 	@RequestMapping("/new")
 	public String showNewUserPage(Model model, HttpServletRequest request) {
+		//Devolucion de productos si existe carrito previo
+		serv.devolucionProductos(request);
+		
 		Usuario u = new Usuario();
 		model.addAttribute("user", u);	
 		model.addAttribute("content", "newUser"); 

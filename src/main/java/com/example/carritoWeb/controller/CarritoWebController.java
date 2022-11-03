@@ -78,7 +78,9 @@ public class CarritoWebController {
 		return null;
 	}
 
-
+	
+	
+	
 	
 	// Crea un CARRITO nuevo, lista los prod y usuarios
 	@RequestMapping("/newCarr")
@@ -247,6 +249,10 @@ public class CarritoWebController {
 			//Se genera la venta			
 			Venta v = new Venta(carr,total,date);
 			serv.saveVenta(v);
+			
+			request.getSession().setAttribute("carrito", null);
+			request.getSession().setAttribute("listProd", null);
+			request.getSession().setAttribute("carritoArray", null);
 			
 			return "redirect:/carritos/listarCarritos/";
 			

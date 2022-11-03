@@ -46,9 +46,16 @@ public class ProductoWebController {
 		// -------------------------------PRODUCTO------------------------------
 		// --------------------------------------------------------------------------------------------
 
+    	
+    
+    
+    
+    
 		@RequestMapping("/listarProductos")
-		public String listarProductos(Model model) 
+		public String listarProductos(Model model, HttpServletRequest request) 
 		{
+			//Devolucion de productos si existe carrito previo
+			serv.devolucionProductos(request);
 			//List<Producto> listp = repoP.findAll();
 			//List<Producto> listp = repoP.findAllProductoOrdenado();
 			Page<Producto> page = productoService.findPaginated(1, PAGESIZE, "nombre", "asc");
@@ -70,6 +77,9 @@ public class ProductoWebController {
 		
 		@RequestMapping("/newProd")
 		public String showNewProdPage(Model model, HttpServletRequest request) {
+			//Devolucion de productos si existe carrito previo
+			serv.devolucionProductos(request);
+			
 			request.getSession().setAttribute("idProdSession", -1);
 			Producto p = new Producto();
 			model.addAttribute("product", p);	

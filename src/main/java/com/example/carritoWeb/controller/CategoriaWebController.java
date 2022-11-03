@@ -36,8 +36,11 @@ public class CategoriaWebController {
 // --------------------------------------------------------------------------------------------
 
 	@RequestMapping("/listarCategorias")
-	public String listarCategorias(Model model) 
+	public String listarCategorias(Model model, HttpServletRequest request) 
 	{
+		//Devolucion de productos si existe carrito previo
+		serv.devolucionProductos(request);
+		
 		List<Categoria> list = serv.findAllCategoriasSort();
 		model.addAttribute("listCategoria", list);
 		model.addAttribute("content", "listasCateg"); 
@@ -46,6 +49,9 @@ public class CategoriaWebController {
 	
 	@RequestMapping("/newCateg")
 	public String showNewCategPage(Model model, HttpServletRequest request) {
+		//Devolucion de productos si existe carrito previo
+		serv.devolucionProductos(request);
+		
 		request.getSession().setAttribute("idCategSession", -1);
 		Categoria c = new Categoria();
 		model.addAttribute("categ", c);	
